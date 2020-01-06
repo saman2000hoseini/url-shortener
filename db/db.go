@@ -3,6 +3,7 @@ package db
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"time"
 	"urlShortener/model"
 )
 
@@ -18,4 +19,8 @@ func New() *gorm.DB {
 
 func Migrate(db *gorm.DB) {
 	db.AutoMigrate(&model.Link{})
+}
+
+func Cleanup(db *gorm.DB) {
+	db.Unscoped().Delete(&model.Link{}, "CreatedAt < ?", time.Now().Add(-1*time.Hour))
 }
