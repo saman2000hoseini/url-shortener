@@ -1,14 +1,13 @@
 package utils
 
 import (
-	"github.com/jinzhu/gorm"
 	"time"
-	db2 "urlShortener/db"
+	"urlShortener/db"
 )
 
-func CleanDB(db *gorm.DB) {
+func CleanDB() {
 	for {
-		db2.Cleanup(db)
+		db.Cleanup()
 		time.Sleep(time.Hour)
 	}
 }

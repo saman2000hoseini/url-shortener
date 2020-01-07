@@ -7,8 +7,11 @@ import (
 	"urlShortener/model"
 )
 
+var db *gorm.DB
+
 func New() *gorm.DB {
-	db, err := gorm.Open("sqlite3", "./links.db")
+	var err error
+	db, err = gorm.Open("sqlite3", "./links.db")
 	if err != nil {
 		panic(err)
 	}
@@ -17,10 +20,14 @@ func New() *gorm.DB {
 	return db
 }
 
-func Migrate(db *gorm.DB) {
+func Migrate() {
 	db.AutoMigrate(&model.Link{})
 }
 
-func Cleanup(db *gorm.DB) {
+func Cleanup() {
 	db.Unscoped().Delete(&model.Link{}, "CreatedAt < ?", time.Now().Add(-1*time.Hour))
+}
+
+func MyDB() *gorm.DB {
+	return db
 }
